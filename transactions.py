@@ -40,9 +40,13 @@ def flag_transaction(row):
         return 'Limit reached'
     else:
         return 'Clean'
- 
+    
+    
 df['risk_flag'] = df.apply(flag_transaction , axis= 1)
 print(df['risk_flag'].value_counts())
+    
+    
+
 
 today = date.today()
 counts = df['risk_flag'].value_counts()
