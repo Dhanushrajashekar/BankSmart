@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"from flask import Flask; app = Flask\\(__name__\\); print\\(''Static folder:'', app.static_folder\\); print\\(''Static URL path:'', app.static_url_path\\)\")",
+      "Bash(taskkill /F /IM python.exe)",
+      "Bash(cmd.exe /c \"taskkill /F /IM python.exe\")",
+      "Bash(cmd.exe /c \"tasklist | findstr python\")"
+    ]
+  }
+}

@@ -4,11 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transaction Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>Bank Transaction Risk Report</h1>
-    <p>Fraudulent Transactions: {{ fraud }}</p>
-    <p>Suspicious Transactions: {{ sus }}</p>
-    <p>Clean Transactions: {{ clean }}</p>
+    <div class="container">
+        <div class="box fraud-box">
+            <h2>Fraudulent</h2>
+            <p class="count">{{ fraud }}</p>
+        </div>
+        <div class="box suspicious-box">
+            <h2>Suspicious</h2>
+            <p class="count">{{ sus }}</p>
+        </div>
+        <div class="box clean-box">
+            <h2>Clean</h2>
+            <p class="count">{{ clean }}</p>
+        </div>
+    </div>
 </body>
 </html>
