@@ -5,5 +5,11 @@
 <body>
 <h1>Welcome to Bank Smart</h1>
 <p><a href="{{url_for('final_report')}}">Transaction Report</a></p>
+
+<h1>File upload</h1>
+<form method="POST" enctype="multipart/form-data" action="/uploads">
+    <input type="file" name="files">
+    <button type="submit">Upload</button>
+</form>
 </body>
 </html> 
