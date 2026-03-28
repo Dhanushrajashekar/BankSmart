@@ -1,6 +1,6 @@
 ================================
 BANKSMART FRAUD REPORT
-Generated: 2026-03-27
+Generated: 2026-03-28
 ================================
 Total accounts analysed: 3,000
 Total amount at risk: 59,647,615
