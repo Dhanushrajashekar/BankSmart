@@ -1,3 +1,4 @@
+/* reset default browser spacing so nothing looks off between browsers */
 * {
     margin: 0;
     padding: 0;
@@ -6,6 +7,7 @@
 
 body {
     font-family: Arial, sans-serif;
+    /* purple gradient used across both index and report pages */
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
     padding: 40px 20px;
@@ -18,6 +20,7 @@ h1 {
     font-size: 2.5em;
 }
 
+/* report page layout — three equal columns side by side */
 .container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -31,6 +34,7 @@ h1 {
     padding: 30px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     text-align: center;
+    /* slight lift on hover so the cards feel interactive */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -44,12 +48,14 @@ h1 {
     font-size: 1.5em;
 }
 
+/* big number in the centre of each card */
 .count {
     font-size: 2.5em;
     font-weight: bold;
     margin: 0;
 }
 
+/* red left border = danger */
 .fraud-box {
     border-left: 5px solid #d32f2f;
     background-color: #ffebee;
@@ -59,6 +65,7 @@ h1 {
     color: #d32f2f;
 }
 
+/* yellow/amber = needs a closer look */
 .suspicious-box {
     border-left: 5px solid #ffc107;
     background-color: #fff8e1;
@@ -68,6 +75,7 @@ h1 {
     color: #fbc02d;
 }
 
+/* green = all good */
 .clean-box {
     border-left: 5px solid #4caf50;
     background-color: #e8f5e9;

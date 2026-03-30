@@ -1,15 +1,282 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>Bank Smart</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Smart — Transaction Analyser</title>
+
+    <!-- shared styles used by report.html too (boxes, gradient background, etc.) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        /* styles only needed on this page — kept here so style.css stays clean */
+
+        /* top section with the title and tagline */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+
+        /* little pill label above the title */
+        .hero .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            font-size: 0.78em;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.35);
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            color: #fff;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        /* the short description under the title */
+        .hero p.subtitle {
+            color: rgba(255,255,255,0.85);
+            font-size: 1.15em;
+            max-width: 520px;
+            margin: 0 auto 48px;
+            line-height: 1.6;
+        }
+
+        /* white card that holds the upload form */
+        .upload-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 40px 48px;
+            max-width: 500px;
+            margin: 0 auto 60px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+            text-align: center;
+        }
+
+        .upload-card h2 {
+            color: #4a3a7a;
+            font-size: 1.4em;
+            margin-bottom: 8px;
+        }
+
+        .upload-card p {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 28px;
+        }
+
+        /* dashed box where the user picks or drops the file */
+        .drop-area {
+            border: 2px dashed #c5b8e8;
+            border-radius: 12px;
+            padding: 30px 20px;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            margin-bottom: 20px;
+            position: relative; /* needed so the hidden file input can cover it */
+        }
+
+        /* highlight when the user hovers over the drop area */
+        .drop-area:hover {
+            border-color: #764ba2;
+            background: #f9f6ff;
+        }
+
+        /* upload cloud icon */
+        .drop-area svg {
+            width: 44px;
+            height: 44px;
+            fill: none;
+            stroke: #9b7fd4;
+            stroke-width: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .drop-area p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .drop-area p strong {
+            color: #764ba2;
+        }
+
+        /*
+            the real file input is invisible and stretched over the whole drop area
+            so clicking anywhere in the box opens the file picker
+        */
+        .drop-area input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* shows the selected file name after the user picks one */
+        #file-name {
+            font-size: 0.85em;
+            color: #555;
+            margin-bottom: 20px;
+            min-height: 20px;
+        }
+
+        /* submit button — matches the purple gradient from the background */
+        .btn-primary {
+            display: inline-block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            font-size: 1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s;
+            letter-spacing: 0.3px;
+        }
+
+        /* subtle lift on hover so it feels clickable */
+        .btn-primary:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        /* three info cards at the bottom explaining what the tool does */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 860px;
+            margin: 0 auto 70px;
+            padding: 0 20px;
+        }
+
+        /* each card has a frosted-glass look against the purple background */
+        .feature-card {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.22);
+            border-radius: 14px;
+            padding: 28px 24px;
+            color: #fff;
+            text-align: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .feature-card .icon {
+            font-size: 2em;
+            margin-bottom: 12px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.05em;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            font-size: 0.85em;
+            color: rgba(255,255,255,0.75);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        footer {
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.8em;
+            padding-bottom: 30px;
+        }
+
+        /* on small screens stack the feature cards and shrink the title */
+        @media (max-width: 680px) {
+            .hero h1 { font-size: 2.1em; }
+            .features { grid-template-columns: 1fr; }
+            .upload-card { padding: 28px 24px; }
+        }
+    </style>
 </head>
 <body>
-<h1>Welcome to Bank Smart</h1>
-<p><a href="{{url_for('file_upload')}}">Transaction Report</a></p>
 
-<h1>File upload</h1>
-<form method="POST" enctype="multipart/form-data" action="/uploads">
-    <input type="file" name="files">
-    <button type="submit">Upload</button>
-</form>
+    <!-- top banner: app name + one-liner about what it does -->
+    <section class="hero">
+        <div class="badge">Fraud Detection System</div>
+        <h1>Bank Smart</h1>
+        <p class="subtitle">
+            Upload your transaction CSV and instantly identify fraudulent,
+            suspicious, and clean records — powered by intelligent risk analysis.
+        </p>
+    </section>
+
+    <!-- main action: pick a CSV and send it to /uploads for processing -->
+    <div class="upload-card">
+        <h2>Analyze Transactions</h2>
+        <p>Accepts CSV files exported from your banking system</p>
+
+        <!-- posts to the file_upload() route in app.py -->
+        <form method="POST" enctype="multipart/form-data" action="/uploads" id="upload-form">
+
+            <!-- clicking anywhere here opens the file picker (see CSS above) -->
+            <div class="drop-area" id="drop-area">
+                <!-- upload icon (SVG inline so no extra request needed) -->
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                </svg>
+                <p><strong>Click to browse</strong> or drag & drop</p>
+                <p>CSV files only</p>
+                <!-- hidden input — the JS below updates #file-name when this changes -->
+                <input type="file" name="files" accept=".csv" id="file-input" required>
+            </div>
+
+            <!-- filled in by JS once the user picks a file -->
+            <p id="file-name"></p>
+
+            <button type="submit" class="btn-primary">Run Analysis</button>
+        </form>
+    </div>
+
+    <!-- quick summary of the three outcome categories the report page shows -->
+    <div class="features">
+        <div class="feature-card">
+            <div class="icon">🚨</div>
+            <h3>Fraud Detection</h3>
+            <p>Flags high-risk transactions that match known fraud patterns.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">⚠️</div>
+            <h3>Suspicious Activity</h3>
+            <p>Highlights borderline transactions that need manual review.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">✅</div>
+            <h3>Clean Records</h3>
+            <p>Confirms legitimate transactions so you can focus on what matters.</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Bank Smart &mdash; Transaction Risk Analyser
+    </footer>
+
+    <script>
+        // grab the hidden file input and the label below the drop area
+        const input = document.getElementById('file-input');
+        const label = document.getElementById('file-name');
+
+        // when the user picks a file, show its name so they know it was selected
+        input.addEventListener('change', () => {
+            label.textContent = input.files.length ? input.files[0].name : '';
+        });
+    </script>
+
 </body>
-</html> 
+</html>

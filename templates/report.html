@@ -4,23 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transaction Report</title>
+    <!-- shared stylesheet — defines the gradient background, box styles, and hover effects -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>Bank Transaction Risk Report</h1>
+
+    <!-- three cards, one per outcome category — counts come from app.py via Jinja -->
     <div class="container">
+
+        <!-- confirmed fraud — anything flagged result==2 in the dataset -->
         <div class="box fraud-box">
             <h2>Fraudulent</h2>
             <p class="count">{{ fraud }}</p>
         </div>
+
+        <!-- borderline transactions: high amount from a single location -->
         <div class="box suspicious-box">
             <h2>Suspicious</h2>
             <p class="count">{{ sus }}</p>
         </div>
+
+        <!-- everything that passed all the checks in flag_transaction() -->
         <div class="box clean-box">
             <h2>Clean</h2>
             <p class="count">{{ clean }}</p>
         </div>
+
     </div>
 </body>
 </html>
